@@ -6,9 +6,12 @@ console.log("NobelData", NobelData)
 
 // Colors
 
-let gold = "#FFD700"
 let gray = "#A6A6A6"
 let dark_gray = "#5C5C5C"
+
+let gold = "#FFD700"
+let blue = "#0080FF"
+
 
 // --- Print statements to see our data 
 
@@ -119,7 +122,7 @@ function CountEachPrize(data, prize) {
 
   for (let i = 0; i < FilteredData.length; i++) {
 
-    row = data[i]
+    row = FilteredData[i]
     
     if (row.Age_When_Awarded < 20) {
       count_teens += 1
@@ -168,14 +171,24 @@ function init() {
     x: x_value,
     y: men_array,
     name: "Men",
-    type: "bar"
+    type: "bar",
+    marker: {
+      color: blue
+    },
+    hovertemplate: "<b>Men</b><br>"+ "Total: %{y}" +
+    "<br>Age range: %{x}<extra></extra>"
   };
 
   let trace2 = {
     x: x_value,
     y: women_array,
     name: "Women",
-    type: "bar"
+    type: "bar",
+   marker: {
+      color: gold
+    },
+    hovertemplate: "<b>Women</b><br>"+ "Total: %{y}" +
+    "<br>Age range: %{x}<extra></extra>"
   }
 
   let data = [trace1, trace2]
@@ -183,6 +196,8 @@ function init() {
 // Set layout/theme of the plot
 
   let layout = {
+    hovermode:'closest',
+    hoverlabel: {namelength: -1, font: {color: 'black'}},
     barmode: "group",
     title: {
       text: "Nobel Prize Winners by Age Group",
@@ -228,6 +243,18 @@ function init() {
       gridwidth: .02,
       zerolinecolor: gray,
       zerolinewidth: 2,
+    },
+    legend: {
+      x: 1,
+      y: 1,
+      traceorder: 'normal',
+      font: {
+        size: 25,
+        color: gray
+      },
+      bgcolor: "rgba(0,0,0,0)",
+      bordercolor: "#rgba(0,0,0,0)",
+      borderwidth: 2
     }
 };
 
@@ -253,14 +280,46 @@ function updatePlot() {
   let y1 = [];
   let y2 = [];
   
-  if (dataset === "ChemistryDataset") {
+  
 
-    menArray = CountEachPrize(MenLaureatesData, "Chemistry")
-    womenArray = CountEachPrize(WomenLaureatesData, "Chemistry")
+  if (dataset === "AllPrizeDataset") {
+
+    men_array = CountAllPrizes(MenLaureatesData)
+    women_array = CountAllPrizes(WomenLaureatesData)
     x = ["<20", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80+"];
 
-    y1 = menArray
-    y2 = womenArray
+    y1 = men_array
+    y2 = women_array
+
+    console.log("All selected for mew", men_array)
+    console.log("All selected for women", women_array)
+
+    let trace1 = {
+      x: x,
+      y: y1,
+      name: "Men",
+      type: "bar"
+    };
+
+    let trace2 = {
+      x: x,
+      y: y2,
+      name: "Women",
+      type: "bar"
+    }
+    
+    data = [trace1, trace2]
+
+  }
+
+  else if (dataset === "ChemistryDataset") {
+
+    men_array = CountEachPrize(MenLaureatesData, "Chemistry")
+    women_array = CountEachPrize(WomenLaureatesData, "Chemistry")
+    x = ["<20", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80+"];
+
+    y1 = men_array
+    y2 = women_array
 
     console.log("Chemistry selected for men", y1)
     console.log("Chemistry selected for women", y2)
@@ -283,17 +342,17 @@ function updatePlot() {
 
   }
 
-  else if (dataset === "AllPrizeDataset") {
+  else if (dataset === "EconomicDataset") {
 
-    menArray = CountAllPrizes(MenLaureatesData)
-    womenArray = CountAllPrizes(WomenLaureatesData)
+    men_array = CountEachPrize(MenLaureatesData, "Economic Sciences")
+    women_array = CountEachPrize(WomenLaureatesData, "Economic Sciences")
     x = ["<20", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80+"];
 
-    y1 = menArray
-    y2 = womenArray
+    y1 = men_array
+    y2 = women_array
 
-    console.log("All selected for mew", menArray)
-    console.log("All selected for women", womenArray)
+    console.log("Economic Sciences selected for men", y1)
+    console.log("Economics Sciences selected for women", y2)
 
     let trace1 = {
       x: x,
@@ -313,16 +372,139 @@ function updatePlot() {
 
   }
 
-  // Note the extra brackets around 'x' and 'y'
-  Plotly.restyle("plot", "x", [x]);
+  else if (dataset === "LiteratureDataset") {
+
+    men_array = CountEachPrize(MenLaureatesData, "Literature")
+    women_array = CountEachPrize(WomenLaureatesData, "Literature")
+    x = ["<20", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80+"];
+
+    y1 = men_array
+    y2 = women_array
+
+    console.log("Literature selected for men", y1)
+    console.log("Literature selected for women", y2)
+
+    let trace1 = {
+      x: x,
+      y: y1,
+      name: "Men",
+      type: "bar"
+    };
+
+    let trace2 = {
+      x: x,
+      y: y2,
+      name: "Women",
+      type: "bar"
+    }
+    
+    data = [trace1, trace2]
+
+  }
+
+  else if (dataset === "MedicineDataset") {
+
+    menArray = CountEachPrize(MenLaureatesData, "Physiology or Medicine")
+    womenArray = CountEachPrize(WomenLaureatesData, "Physiology or Medicine")
+    x = ["<20", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80+"];
+
+    y1 = men_array
+    y2 = women_array
+
+    console.log("Medicine selected for men", y1)
+    console.log("Medicine selected for women", y2)
+
+    let trace1 = {
+      x: x,
+      y: y1,
+      name: "Men",
+      type: "bar"
+    };
+
+    let trace2 = {
+      x: x,
+      y: y2,
+      name: "Women",
+      type: "bar"
+    }
+    
+    data = [trace1, trace2]
+
+  }
+
+  else if (dataset === "PeaceDataset") {
+
+    men_array = CountEachPrize(MenLaureatesData, "Peace")
+    women_array = CountEachPrize(WomenLaureatesData, "Peace")
+    x = ["<20", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80+"];
+
+    y1 = men_array
+    y2 = women_array
+
+    console.log("Peace selected for men", y1)
+    console.log("Peace selected for women", y2)
+
+    let trace1 = {
+      x: x,
+      y: y1,
+      name: "Men",
+      type: "bar"
+    };
+
+    let trace2 = {
+      x: x,
+      y: y2,
+      name: "Women",
+      type: "bar"
+    }
+    
+    data = [trace1, trace2]
+
+  }
+
+
+  else if (dataset === "PhysicsDataset") {
+
+    men_array = CountEachPrize(MenLaureatesData, "Physics")
+    women_array = CountEachPrize(WomenLaureatesData, "Physics")
+    x = ["<20", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80+"];
+
+    y1 = men_array
+    y2 = women_array
+
+    console.log("Physics selected for men", y1)
+    console.log("Physics selected for women", y2)
+
+    let trace1 = {
+      x: x,
+      y: y1,
+      name: "Men",
+      type: "bar"
+    };
+
+    let trace2 = {
+      x: x,
+      y: y2,
+      name: "Women",
+      type: "bar"
+    }
+    
+    data = [trace1, trace2]
+
+  }
+
+  // Method 1
+  //Plotly.restyle("plot", "x", [x]);
   //Plotly.restyle("plot", "y", [[y1], [y2]], [0,1])
   
+  // Method 2
+  //Plotly.restyle("plot", "x", [x]);
   //Plotly.restyle("plot", "y1", y1);
   //Plotly.restyle("plot", "y2", y2);
 
-
-  //Plotly.restyle("plot", "data", [data]);
-
+  // Method 3
+  Plotly.restyle("plot", "x", [x]);
+  Plotly.restyle("plot", {"y": [y1, y2]});
 
   //Plotly.restyle("plot", "data", [data]);
 }
