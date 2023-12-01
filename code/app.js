@@ -404,8 +404,8 @@ function updatePlot() {
 
   else if (dataset === "MedicineDataset") {
 
-    menArray = CountEachPrize(MenLaureatesData, "Physiology or Medicine")
-    womenArray = CountEachPrize(WomenLaureatesData, "Physiology or Medicine")
+    men_array = CountEachPrize(MenLaureatesData, "Physiology or Medicine")
+    women_array = CountEachPrize(WomenLaureatesData, "Physiology or Medicine")
     x = ["<20", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80+"];
 
     y1 = men_array
